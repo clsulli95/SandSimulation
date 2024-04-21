@@ -27,6 +27,18 @@ impl Default for Pixel {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Adjacency {
+    TOP_LEFT,
+    TOP,
+    TOP_RIGHT,
+    MID_LEFT,
+    MID_RIGHT,
+    BOT_LEFT,
+    BOT,
+    BOT_RIGHT,
+}
+
 pub struct World {
     world: Vec<Vec<Pixel>>,
     size: usize,
@@ -50,6 +62,33 @@ impl World {
         let real_x = self.size - 1 - y;
         let real_y = x;
         self.world[real_x][real_y].pixel_type
+    }
+
+    pub fn get_pixel_adj(&self, x: usize, y: usize, adj: Adjacency) -> PixelType {
+        let mut real_x = self.size - 1 - y;
+        let mut real_y = x;
+
+        match adj {
+            Adjacency::TOP_LEFT => {
+                real_x -= 1;
+            }
+            Adjacency::TOP => real_y += 1,
+            Adjacency::TOP_RIGHT => {
+                real_x += 1;
+                real_y += 1;
+            }
+            Adjacency::MID_LEFT => real_x -= 1,
+            Adjacency::MID_RIGHT => real_x += 1,
+            Adjacency::BOT_LEFT => {
+                real_x -= 1;
+                real_y -= 1;
+            }
+            Adjacency::BOT => real_y - 1,
+            Adjacency::BOT_RIGHT => {
+                real_x += 1;
+                real_y -= 1;
+            }
+        }
     }
 }
 
