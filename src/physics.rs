@@ -36,7 +36,22 @@ fn handle_sand(world: &mut World, point: Point) -> Result<()> {
     Ok(())
 }
 
-fn handle_water(_world: &mut World, _point: Point) -> Result<()> {
+fn handle_water(world: &mut World, point: Point) -> Result<()> {
+    // Rule #1 - If nothing below, move down
+    if world.get_pixel_type_adj(point, Adjacency::Below) == PixelType::Air {
+        world.swap_pixel_type(&point, Adjacency::Below)?;
+    // Rule #2 - If solid below, attempt left
+    } else if world.get_pixel_type_adj(point, Adjacency::BelowLeft) == PixelType::Air {
+        world.swap_pixel_type(&point, Adjacency::BelowLeft)?;
+    // Rule #3- Attempt right
+    } else if world.get_pixel_type_adj(point, Adjacency::BelowRight) == PixelType::Air {
+        world.swap_pixel_type(&point, Adjacency::BelowRight)?;
+    } else if world.get_pixel_type_adj(point, Adjacency::Left) == PixelType::Air {
+        world.swap_pixel_type(&point, Adjacency::Left)?;
+    } else if world.get_pixel_type_adj(point, Adjacency::Right) == PixelType::Air {
+        world.swap_pixel_type(&point, Adjacency::Right)?;
+    }
+
     Ok(())
 }
 

@@ -49,6 +49,17 @@ fn update(state: &mut GameState, _c: &mut EngineContext) {
             .unwrap();
     }
 
+    if is_key_down(KeyCode::W) || is_key_pressed(KeyCode::W) {
+        let screen_pos = mouse_world();
+        state
+            .world
+            .set_pixel_type(
+                Point::new(screen_pos.x as usize, screen_pos.y as usize),
+                PixelType::Water,
+            )
+            .unwrap();
+    }
+
     physics::update_world(&mut state.world).unwrap();
 
     state.world.render();
