@@ -9,7 +9,7 @@ simple_game!("My Game Demo", GameState, config, setup, update);
 fn config(config: GameConfig) -> GameConfig {
     GameConfig {
         vsync_enabled: false,
-        target_framerate: 20,
+        target_framerate: 60,
         ..config
     }
 }

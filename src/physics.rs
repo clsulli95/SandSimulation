@@ -23,13 +23,22 @@ fn handle_solid(_world: &mut World, _point: Point) -> Result<()> {
 
 fn handle_sand(world: &mut World, point: Point) -> Result<()> {
     // Rule #1 - If nothing below, move down
-    if world.get_pixel_type_adj(point, Adjacency::Below) == PixelType::Air {
+    if matches!(
+        world.get_pixel_type_adj(point, Adjacency::Below),
+        PixelType::Air | PixelType::Water
+    ) {
         world.swap_pixel_type(&point, Adjacency::Below)?;
     // Rule #2 - If solid below, attempt left
-    } else if world.get_pixel_type_adj(point, Adjacency::BelowLeft) == PixelType::Air {
+    } else if matches!(
+        world.get_pixel_type_adj(point, Adjacency::BelowLeft),
+        PixelType::Air | PixelType::Water
+    ) {
         world.swap_pixel_type(&point, Adjacency::BelowLeft)?;
     // Rule #3- Attempt right
-    } else if world.get_pixel_type_adj(point, Adjacency::BelowRight) == PixelType::Air {
+    } else if matches!(
+        world.get_pixel_type_adj(point, Adjacency::BelowRight),
+        PixelType::Air | PixelType::Water
+    ) {
         world.swap_pixel_type(&point, Adjacency::BelowRight)?;
     }
 
