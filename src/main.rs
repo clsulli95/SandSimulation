@@ -1,8 +1,13 @@
+pub mod paintbrush;
 pub mod physics;
 pub mod world;
 
 use crate::world::{PixelType, Point, World};
 use comfy::*;
+use num_traits::ToPrimitive;
+
+const SCALE_FACTOR: f32 = 1.0;
+const WORLD_OFFSET: f32 = SCALE_FACTOR / 2.0;
 
 simple_game!("My Game Demo", GameState, config, setup, update);
 
@@ -29,35 +34,20 @@ fn setup(state: &mut GameState, _c: &mut EngineContext) {
 fn update(state: &mut GameState, _c: &mut EngineContext) {
     if is_mouse_button_down(MouseButton::Left) || is_mouse_button_pressed(MouseButton::Left) {
         let screen_pos = mouse_world();
-        state
-            .world
-            .set_pixel_type(
-                Point::new(screen_pos.x as usize, screen_pos.y as usize),
-                PixelType::Solid,
-            )
-            .unwrap();
+        let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
+        paintbrush::paint_circle(&mut state.world, &point, 1.0, PixelType::Solid);
     }
 
     if is_mouse_button_down(MouseButton::Right) || is_mouse_button_pressed(MouseButton::Right) {
         let screen_pos = mouse_world();
-        state
-            .world
-            .set_pixel_type(
-                Point::new(screen_pos.x as usize, screen_pos.y as usize),
-                PixelType::Sand,
-            )
-            .unwrap();
+        let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
+        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Sand);
     }
 
     if is_key_down(KeyCode::W) || is_key_pressed(KeyCode::W) {
         let screen_pos = mouse_world();
-        state
-            .world
-            .set_pixel_type(
-                Point::new(screen_pos.x as usize, screen_pos.y as usize),
-                PixelType::Water,
-            )
-            .unwrap();
+        let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
+        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Water);
     }
 
     physics::update_world(&mut state.world).unwrap();
@@ -95,7 +85,15 @@ impl Render for World {
                     PixelType::OutOfBounds => RED,
                 };
 
-                draw_rect(vec2(x as f32, y as f32), vec2(1.0, 1.0), color, 0);
+                draw_rect(
+                    vec2(
+                        x.to_f32().unwrap() + WORLD_OFFSET,
+                        y.to_f32().unwrap() + WORLD_OFFSET,
+                    ),
+                    vec2(SCALE_FACTOR, SCALE_FACTOR),
+                    color,
+                    0,
+                );
             }
         }
     }
