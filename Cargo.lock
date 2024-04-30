@@ -585,6 +585,7 @@ dependencies = [
  "anyhow",
  "comfy",
  "num-traits",
+ "rand",
 ]
 
 [[package]]

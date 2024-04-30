@@ -35,19 +35,19 @@ fn update(state: &mut GameState, _c: &mut EngineContext) {
     if is_mouse_button_down(MouseButton::Left) || is_mouse_button_pressed(MouseButton::Left) {
         let screen_pos = mouse_world();
         let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
-        paintbrush::paint_circle(&mut state.world, &point, 1.0, PixelType::Solid);
+        paintbrush::paint_circle(&mut state.world, &point, 2.0, PixelType::Solid, 100.0);
     }
 
     if is_mouse_button_down(MouseButton::Right) || is_mouse_button_pressed(MouseButton::Right) {
         let screen_pos = mouse_world();
         let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
-        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Sand);
+        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Sand, 10.0);
     }
 
     if is_key_down(KeyCode::W) || is_key_pressed(KeyCode::W) {
         let screen_pos = mouse_world();
         let point = Point::new(screen_pos.x as usize, screen_pos.y as usize);
-        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Water);
+        paintbrush::paint_circle(&mut state.world, &point, 3.0, PixelType::Water, 10.0);
     }
 
     physics::update_world(&mut state.world).unwrap();
